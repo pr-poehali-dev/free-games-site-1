@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -13,42 +14,46 @@ interface Game {
   reviews: number;
   image: string;
   isNew: boolean;
+  link?: string;
 }
 
 const games: Game[] = [
   {
     id: 1,
-    title: "Pixel Runner",
-    category: "Платформер",
+    title: "Snake",
+    category: "Аркада",
     rating: 4.8,
     reviews: 2847,
     image: "https://cdn.poehali.dev/projects/9f1f54c0-d2ef-4df8-ad3b-73ca21b5c7c1/files/ab9cac2e-c667-4027-aa87-400cea8f353d.jpg",
-    isNew: true
+    isNew: true,
+    link: "/snake"
   },
   {
     id: 2,
-    title: "Neon Racer",
-    category: "Гонки",
-    rating: 4.6,
-    reviews: 1923,
-    image: "https://cdn.poehali.dev/projects/9f1f54c0-d2ef-4df8-ad3b-73ca21b5c7c1/files/2318b1ff-f868-4ccb-920b-1ccbc413ae47.jpg",
-    isNew: true
-  },
-  {
-    id: 3,
-    title: "Block Blast",
+    title: "Tetris",
     category: "Головоломка",
     rating: 4.9,
     reviews: 3421,
-    image: "https://cdn.poehali.dev/projects/9f1f54c0-d2ef-4df8-ad3b-73ca21b5c7c1/files/faa4e315-df43-4455-9ac9-9c7aea6fb454.jpg",
-    isNew: false
+    image: "https://cdn.poehali.dev/projects/9f1f54c0-d2ef-4df8-ad3b-73ca21b5c7c1/files/2318b1ff-f868-4ccb-920b-1ccbc413ae47.jpg",
+    isNew: true,
+    link: "/tetris"
   },
   {
-    id: 4,
-    title: "Space Invaders Remix",
+    id: 3,
+    title: "Arkanoid",
     category: "Аркада",
     rating: 4.7,
     reviews: 2156,
+    image: "https://cdn.poehali.dev/projects/9f1f54c0-d2ef-4df8-ad3b-73ca21b5c7c1/files/faa4e315-df43-4455-9ac9-9c7aea6fb454.jpg",
+    isNew: true,
+    link: "/arkanoid"
+  },
+  {
+    id: 4,
+    title: "Pixel Runner",
+    category: "Платформер",
+    rating: 4.6,
+    reviews: 1923,
     image: "https://cdn.poehali.dev/projects/9f1f54c0-d2ef-4df8-ad3b-73ca21b5c7c1/files/ab9cac2e-c667-4027-aa87-400cea8f353d.jpg",
     isNew: false
   },
@@ -59,7 +64,7 @@ const games: Game[] = [
     rating: 4.5,
     reviews: 1678,
     image: "https://cdn.poehali.dev/projects/9f1f54c0-d2ef-4df8-ad3b-73ca21b5c7c1/files/2318b1ff-f868-4ccb-920b-1ccbc413ae47.jpg",
-    isNew: true
+    isNew: false
   },
   {
     id: 6,
@@ -120,12 +125,24 @@ const GameCard = ({ game }: { game: Game }) => {
           </span>
         </div>
 
-        <Button 
-          className="w-full bg-primary hover:bg-primary/80 text-primary-foreground font-bold border-2 border-primary-foreground/20 shadow-[2px_2px_0_0_rgba(0,0,0,0.3)]"
-        >
-          <Icon name="Gamepad2" size={16} className="mr-2" />
-          Играть
-        </Button>
+        {game.link ? (
+          <Link to={game.link}>
+            <Button 
+              className="w-full bg-primary hover:bg-primary/80 text-primary-foreground font-bold border-2 border-primary-foreground/20 shadow-[2px_2px_0_0_rgba(0,0,0,0.3)]"
+            >
+              <Icon name="Gamepad2" size={16} className="mr-2" />
+              Играть
+            </Button>
+          </Link>
+        ) : (
+          <Button 
+            className="w-full bg-primary hover:bg-primary/80 text-primary-foreground font-bold border-2 border-primary-foreground/20 shadow-[2px_2px_0_0_rgba(0,0,0,0.3)]"
+            disabled
+          >
+            <Icon name="Gamepad2" size={16} className="mr-2" />
+            Скоро
+          </Button>
+        )}
       </CardContent>
     </Card>
   );
