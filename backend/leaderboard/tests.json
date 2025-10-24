@@ -1,0 +1,30 @@
+{
+  "tests": [
+    {
+      "name": "Get leaderboard for snake",
+      "method": "GET",
+      "path": "/?game=snake",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "game": "snake",
+        "leaderboard": "array"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Save new score",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "player_name": "TestPlayer",
+        "game_name": "snake",
+        "score": 150
+      },
+      "expectedStatus": 201,
+      "expectedBody": {
+        "success": true
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

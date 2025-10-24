@@ -1,7 +1,10 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import Icon from '@/components/ui/icon';
+
+const LEADERBOARD_API = 'https://functions.poehali.dev/11062142-0917-45a8-856b-92f32fe8d2c7';
 
 type Direction = 'UP' | 'DOWN' | 'LEFT' | 'RIGHT';
 type Position = { x: number; y: number };
@@ -20,6 +23,9 @@ const SnakeGame = () => {
   const [score, setScore] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const [showNameInput, setShowNameInput] = useState(false);
+  const [playerName, setPlayerName] = useState('');
+  const [savedScore, setSavedScore] = useState(false);
   const directionRef = useRef<Direction>(INITIAL_DIRECTION);
 
   const generateFood = useCallback((currentSnake: Position[]): Position => {
@@ -42,6 +48,27 @@ const SnakeGame = () => {
     setScore(0);
     setIsPlaying(true);
     setIsPaused(false);
+    setShowNameInput(false);
+    setSavedScore(false);
+  };
+
+  const saveScore = async () => {
+    if (!playerName.trim() || savedScore) return;
+
+    try {
+      await fetch(LEADERBOARD_API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          player_name: playerName.trim(),
+          game_name: 'snake',
+          score
+        })
+      });
+      setSavedScore(true);
+    } catch (error) {
+      console.error('Failed to save score:', error);
+    }
   };
 
   const moveSnake = useCallback(() => {
@@ -187,9 +214,31 @@ const SnakeGame = () => {
           </div>
 
           {gameOver && (
-            <div className="mt-4 text-center">
+            <div className="mt-4 text-center space-y-3">
               <p className="text-xl font-bold text-destructive">Игра окончена!</p>
               <p className="text-muted-foreground">Финальный счёт: {score}</p>
+              {!showNameInput && !savedScore && score > 0 && (
+                <Button onClick={() => setShowNameInput(true)} className="bg-accent hover:bg-accent/80">
+                  Сохранить результат
+                </Button>
+              )}
+              {showNameInput && !savedScore && (
+                <div className="flex gap-2 max-w-sm mx-auto">
+                  <Input
+                    placeholder="Твоё имя"
+                    value={playerName}
+                    onChange={(e) => setPlayerName(e.target.value)}
+                    maxLength={20}
+                    onKeyPress={(e) => e.key === 'Enter' && saveScore()}
+                  />
+                  <Button onClick={saveScore} disabled={!playerName.trim()}>
+                    <Icon name="Save" size={16} />
+                  </Button>
+                </div>
+              )}
+              {savedScore && (
+                <p className="text-primary font-bold">✓ Результат сохранён!</p>
+              )}
             </div>
           )}
 

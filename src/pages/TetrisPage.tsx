@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 import TetrisGame from '@/components/games/TetrisGame';
+import Leaderboard from '@/components/Leaderboard';
 
 const TetrisPage = () => {
   return (
@@ -26,14 +27,17 @@ const TetrisPage = () => {
       </header>
 
       <section className="py-8 px-4">
-        <div className="container mx-auto max-w-2xl">
+        <div className="container mx-auto max-w-6xl">
           <h2 className="text-3xl font-bold text-center mb-2 text-primary" style={{ fontFamily: "'Press Start 2P', cursive" }}>
             TETRIS
           </h2>
           <p className="text-center text-muted-foreground mb-6">
             Легендарный Тетрис. Собирай линии и получай очки!
           </p>
-          <TetrisGame />
+          <div className="grid lg:grid-cols-2 gap-6 items-start">
+            <TetrisGame />
+            <Leaderboard gameName="tetris" />
+          </div>
         </div>
       </section>
     </div>
